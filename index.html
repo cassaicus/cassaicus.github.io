@@ -1,136 +1,304 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manga Web Translator - Read Manga in Your Language</title>
+    <title>Manga Web Translator - Seamless Reading Experience</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        :root {
+            --primary: 235 85% 65%;
+            --primary-foreground: 0 0% 100%;
+            --background: 220 33% 98%;
+            --foreground: 220 40% 10%;
+            --card: 0 0% 100%;
+            --card-foreground: 220 40% 10%;
+            --glass: 0 0% 100% / 0.6;
+            --glass-border: 0 0% 100% / 0.8;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: hsl(var(--background));
+            color: hsl(var(--foreground));
+            overflow-x: hidden;
+        }
+
+        .glass {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+        }
+
+        .hero-gradient {
+            background: radial-gradient(circle at 50% 50%, hsla(var(--primary) / 0.1) 0%, transparent 70%);
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .reveal {
+            animation: fadeInUp 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .blob {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: hsla(var(--primary) / 0.15);
+            filter: blur(80px);
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        .feature-card {
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px -20px hsla(var(--primary) / 0.2);
+            border-color: hsla(var(--primary) / 0.3);
+        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900">
 
-    <!-- Header -->
-    <header class="max-w-7xl mx-auto px-6 py-8 flex items-center justify-between">
-        <div class="flex items-center space-x-3">
-            <img src="bb.jpg" alt="Manga Web Translator Icon" class="w-10 h-10 rounded-xl shadow-lg">
-            <span class="text-xl font-extrabold tracking-tight">Manga Web Translator</span>
+<body class="selection:bg-indigo-100 selection:text-indigo-900">
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 transition-all duration-300">
+        <div
+            class="glass max-w-5xl mx-auto my-4 px-6 py-3 rounded-full flex items-center justify-between border border-white/40">
+            <div class="flex items-center space-x-3">
+                <img src="bb.jpg" alt="Icon" class="w-8 h-8 rounded-lg shadow-md">
+                <span class="text-lg font-bold tracking-tight">Manga Translator</span>
+            </div>
+            <a href="https://apps.apple.com/us/app/manga-web-translator/id6755601184"
+                class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold py-2 px-5 rounded-full transition-all shadow-lg hover:shadow-indigo-500/25 active:scale-95">
+                Download
+            </a>
         </div>
-        <a href="https://apps.apple.com/us/app/manga-web-translator/id6755601184" class="hidden md:inline-flex bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-6 rounded-full transition-all shadow-md">
-            Download Now
-        </a>
-    </header>
+    </nav>
 
     <!-- Hero Section -->
-    <section class="max-w-7xl mx-auto px-6 pt-12 pb-24 grid md:grid-cols-2 gap-12 items-center">
-        <div>
-            <h1 class="text-5xl md:text-6xl font-extrabold leading-tight mb-6">
-                Read Japanese Manga in Your Language <span class="text-indigo-600">— Instantly.</span>
-            </h1>
-            <p class="text-lg text-slate-600 mb-10 max-w-lg">
-                One-tap AI translation for your favorite web manga. Experience seamless reading with on-device processing and 100% privacy.
-            </p>
-            <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-                <a href="https://apps.apple.com/us/app/manga-web-translator/id6755601184" class="inline-block transform transition-transform hover:scale-105">
-                    <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1733011200" alt="Download on the App Store" style="height: 60px;">
-                </a>
+    <section class="relative max-w-7xl mx-auto px-6 pt-20 pb-32 overflow-hidden">
+        <div class="blob -top-20 -left-20 animate-pulse"></div>
+        <div class="blob top-1/2 -right-20 opacity-50 delay-1000"></div>
+
+        <div class="grid lg:grid-cols-12 gap-16 items-center">
+            <div class="lg:col-span-7 text-center lg:text-left reveal">
+                <div
+                    class="inline-flex items-center space-x-2 bg-indigo-50 text-indigo-600 px-4 py-1.5 rounded-full text-sm font-semibold mb-8 border border-indigo-100">
+                    <span class="relative flex h-2 w-2">
+                        <span
+                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+                    </span>
+                    <span>AI-Powered Reading</span>
+                </div>
+                <h1 class="text-5xl md:text-7xl font-extrabold leading-[1.1] mb-8 tracking-tight">
+                    Read Manga in <br><span class="text-gradient">Your Language</span>
+                </h1>
+                <p class="text-xl text-slate-500 mb-12 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+                    Experience seamless web manga reading with instant one-tap AI translation. Powered by on-device
+                    processing for 100% privacy.
+                </p>
+                <div
+                    class="flex flex-col sm:flex-row items-center justify-center lg:justify-start space-y-4 sm:space-y-0 sm:space-x-6">
+                    <a href="https://apps.apple.com/us/app/manga-web-translator/id6755601184"
+                        class="transform transition-all hover:scale-105 active:scale-95">
+                        <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1733011200"
+                            alt="App Store" class="h-14 shadow-2xl rounded-xl">
+                    </a>
+                </div>
             </div>
-        </div>
-        <div class="relative">
-            <div class="w-full max-w-[320px] mx-auto aspect-[9/19] bg-slate-200 rounded-[3rem] border-8 border-slate-900 shadow-2xl relative overflow-hidden">
-                <img src="2025-12-09.png" alt="App Screenshot" class="w-full h-full object-cover">
+
+            <div class="lg:col-span-5 relative reveal" style="animation-delay: 0.2s;">
+                <div class="animate-float relative z-10 mx-auto max-w-[300px]">
+                    <div
+                        class="p-3 bg-white/40 backdrop-blur-3xl rounded-[3.5rem] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.15)] border border-white/60">
+                        <div class="rounded-[2.8rem] overflow-hidden border-4 border-slate-900 shadow-inner">
+                            <img src="2025-12-09.png" alt="App Preview" class="w-full">
+                        </div>
+                    </div>
+                    <!-- Decorative floating elements -->
+                    <div
+                        class="absolute -top-4 -right-4 w-16 h-16 bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl flex items-center justify-center text-2xl border border-white animate-bounce">
+                        ✨</div>
+                    <div
+                        class="absolute -bottom-6 -left-6 w-20 h-20 bg-indigo-600 rounded-full shadow-2xl flex items-center justify-center text-white text-3xl border-4 border-white">
+                        🇯🇵</div>
+                </div>
+                <div class="absolute inset-0 bg-gradient-to-tr from-indigo-500/10 to-transparent blur-3xl rounded-full">
+                </div>
             </div>
-            <!-- Decorative elements -->
-            <div class="absolute -top-10 -right-10 w-24 h-24 bg-indigo-100 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
-            <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-blue-100 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse delay-700"></div>
         </div>
     </section>
 
     <!-- Features Section -->
-    <section class="bg-white py-24">
-        <div class="max-w-7xl mx-auto px-6 text-center mb-16">
-            <h2 class="text-3xl font-bold mb-4">Why Choose Manga Web Translator?</h2>
-            <div class="w-20 h-1.5 bg-indigo-600 mx-auto rounded-full"></div>
-        </div>
-        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-12">
-            <!-- Feature 1 -->
-            <div class="p-8 rounded-2xl bg-slate-50 hover:shadow-xl transition-shadow">
-                <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center text-indigo-600 mb-6 text-2xl">
-                    ⚡
-                </div>
-                <h3 class="text-xl font-bold mb-4">One-Tap Translation</h3>
-                <p class="text-slate-600">No more screenshots or switching apps. Simply tap and watch dialogue transform into your language instantly.</p>
+    <section class="py-32 bg-slate-50 relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-24 reveal">
+                <h2 class="text-4xl font-bold mb-6">Why Readers Love It</h2>
+                <p class="text-slate-500 max-w-2xl mx-auto text-lg">Powerful features designed to make your reading
+                    experience effortless.</p>
             </div>
-            <!-- Feature 2 -->
-            <div class="p-8 rounded-2xl bg-slate-50 hover:shadow-xl transition-shadow">
-                <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center text-indigo-600 mb-6 text-2xl">
-                    ✨
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="feature-card glass p-10 rounded-3xl border-slate-200/50 reveal"
+                    style="animation-delay: 0.1s;">
+                    <div
+                        class="w-14 h-14 bg-indigo-600 rounded-2xl flex items-center justify-center text-white text-2xl mb-8 shadow-lg shadow-indigo-200">
+                        ⚡
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Instant Translation</h3>
+                    <p class="text-slate-500 leading-relaxed">No more app-switching. Tap the button and watch dialogue
+                        transform instantly right on the page.</p>
                 </div>
-                <h3 class="text-xl font-bold mb-4">Seamless Overlay</h3>
-                <p class="text-slate-600">Translated text is placed directly over the original speech bubbles. Enjoy the artwork without distractions.</p>
-            </div>
-            <!-- Feature 3 -->
-            <div class="p-8 rounded-2xl bg-slate-50 hover:shadow-xl transition-shadow">
-                <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center text-indigo-600 mb-6 text-2xl">
-                    🌍
+
+                <div class="feature-card glass p-10 rounded-3xl border-slate-200/50 reveal"
+                    style="animation-delay: 0.2s;">
+                    <div
+                        class="w-14 h-14 bg-indigo-600 rounded-2xl flex items-center justify-center text-white text-2xl mb-8 shadow-lg shadow-indigo-200">
+                        ✨
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Natural Overlay</h3>
+                    <p class="text-slate-500 leading-relaxed">Text is intelligently placed within speech bubbles,
+                        preserving the original art and composition.</p>
                 </div>
-                <h3 class="text-xl font-bold mb-4">20+ Languages</h3>
-                <p class="text-slate-600">Support for English, Spanish, French, Chinese, Korean, and many more major languages.</p>
+
+                <div class="feature-card glass p-10 rounded-3xl border-slate-200/50 reveal"
+                    style="animation-delay: 0.3s;">
+                    <div
+                        class="w-14 h-14 bg-indigo-600 rounded-2xl flex items-center justify-center text-white text-2xl mb-8 shadow-lg shadow-indigo-200">
+                        🌍
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">20+ Languages</h3>
+                    <p class="text-slate-500 leading-relaxed">Support for global languages including English, Spanish,
+                        French, Chinese, and Korean.</p>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Privacy Section -->
     <section class="py-24 max-w-7xl mx-auto px-6">
-        <div class="bg-indigo-900 rounded-3xl p-12 text-white flex flex-col md:flex-row items-center justify-between shadow-2xl overflow-hidden relative">
-            <div class="relative z-10 md:w-2/3">
-                <span class="inline-block bg-indigo-500/30 text-indigo-200 px-4 py-1 rounded-full text-sm font-semibold mb-4 border border-indigo-400/20 uppercase tracking-widest">Privacy First</span>
-                <h2 class="text-4xl font-extrabold mb-6 leading-tight">Industry-Leading Privacy & Security</h2>
-                <div class="space-y-6">
-                    <div class="flex items-start">
-                        <div class="w-6 h-6 bg-emerald-400 rounded-full flex-shrink-0 flex items-center justify-center mr-4 mt-1">
-                            <svg class="w-4 h-4 text-emerald-900" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+        <div class="bg-indigo-950 rounded-[3rem] p-16 text-white overflow-hidden relative shadow-2xl reveal">
+            <div class="relative z-10 lg:flex items-center justify-between gap-12">
+                <div class="lg:w-3/5">
+                    <span
+                        class="inline-block bg-white/10 text-indigo-200 px-5 py-2 rounded-full text-xs font-bold mb-8 uppercase tracking-widest border border-white/10 backdrop-blur-sm">
+                        Privacy Matters
+                    </span>
+                    <h2 class="text-4xl md:text-5xl font-extrabold mb-10 leading-tight">Your data never leaves <br><span
+                            class="text-indigo-400">your device.</span></h2>
+
+                    <div class="space-y-8">
+                        <div
+                            class="flex items-start bg-white/5 p-6 rounded-2xl border border-white/10 backdrop-blur-sm">
+                            <div
+                                class="w-10 h-10 bg-emerald-500/20 rounded-xl flex items-center justify-center text-emerald-400 mr-6 flex-shrink-0">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-xl mb-2">Zero Tracking</h4>
+                                <p class="text-indigo-100/70">We don't collect browsing history or personal information.
+                                    Your reading habits are yours alone.</p>
+                            </div>
                         </div>
-                        <div>
-                            <h4 class="font-bold text-xl">Data Not Collected</h4>
-                            <p class="text-indigo-200">The developer does not collect any data from this app. Your browsing and reading history stay private.</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start">
-                        <div class="w-6 h-6 bg-emerald-400 rounded-full flex-shrink-0 flex items-center justify-center mr-4 mt-1">
-                            <svg class="w-4 h-4 text-emerald-900" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-xl">100% On-Device AI</h4>
-                            <p class="text-indigo-200">All image analysis and translation are processed entirely on your iPhone. No data is ever sent to external servers.</p>
+
+                        <div
+                            class="flex items-start bg-white/5 p-6 rounded-2xl border border-white/10 backdrop-blur-sm">
+                            <div
+                                class="w-10 h-10 bg-emerald-500/20 rounded-xl flex items-center justify-center text-emerald-400 mr-6 flex-shrink-0">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-xl mb-2">On-Device Processing</h4>
+                                <p class="text-indigo-100/70">All AI analysis happens locally using Apple's Neural
+                                    Engine. No images are ever uploaded.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="md:w-1/3 flex justify-center mt-12 md:mt-0 relative z-10">
-                <div class="w-32 h-32 bg-white/10 rounded-full flex items-center justify-center text-6xl backdrop-blur-sm border border-white/20">
-                    🛡️
+
+                <div class="lg:w-2/5 flex justify-center mt-20 lg:mt-0">
+                    <div
+                        class="w-64 h-64 bg-white/5 rounded-[4rem] flex items-center justify-center text-8xl shadow-2xl shadow-black/20 border border-white/10 backdrop-blur-md relative overflow-hidden group">
+                        <div class="absolute inset-0 bg-indigo-600/20 group-hover:bg-indigo-600/40 transition-colors">
+                        </div>
+                        <span class="relative z-10 group-hover:scale-110 transition-transform">🛡️</span>
+                    </div>
                 </div>
             </div>
-            <!-- Decorative background blob -->
-            <div class="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 bg-indigo-500 rounded-full mix-blend-overlay filter blur-3xl opacity-20"></div>
+            <!-- Background effects -->
+            <div class="absolute -top-40 -right-40 w-96 h-96 bg-indigo-600 rounded-full filter blur-[120px] opacity-30">
+            </div>
+            <div
+                class="absolute -bottom-40 -left-40 w-96 h-96 bg-indigo-400 rounded-full filter blur-[120px] opacity-20">
+            </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-slate-900 text-slate-400 py-12 px-6">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center">
-            <div class="mb-6 md:mb-0 flex items-center space-x-2">
-                <img src="bb.jpg" alt="Icon" class="w-8 h-8 rounded-lg">
-                <span class="text-white font-bold">Manga Web Translator</span>
+    <footer class="bg-white border-t border-slate-200 py-16 px-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+            <div class="flex items-center space-x-3">
+                <img src="bb.jpg" alt="Icon" class="w-10 h-10 rounded-xl">
+                <span class="text-xl font-bold">Manga Web Translator</span>
             </div>
-            <p class="text-sm">
-                &copy; 2025 All rights reserved.
-            </p>
+            <div class="text-slate-400 text-sm">
+                &copy; 2026 Manga Web Translator. All rights reserved. Built for Privacy.
+            </div>
+            <div class="flex space-x-6 text-sm font-medium text-slate-600">
+                <a href="#" class="hover:text-indigo-600 transition-colors">Support</a>
+                <a href="#" class="hover:text-indigo-600 transition-colors">Privacy Policy</a>
+            </div>
         </div>
     </footer>
 
 </body>
+
 </html>
