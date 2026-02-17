@@ -1,153 +1,224 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MangaHub - Trending</title>
+    <title>少年ジャンプ＋スタイル - マンガハブ</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap"
+        rel="stylesheet">
     <style>
         :root {
-            --primary: 322 100% 50%; /* Vibrant Pink */
-            --secondary: 260 100% 60%; /* Vibrant Purple */
-            --accent: 30 100% 50%; /* Vibrant Orange */
-            --background: 210 20% 98%;
+            --jump-red: #e60012;
+            --jump-dark: #333333;
+            --jump-bg: #f5f5f5;
+            --jump-text: #1a1a1a;
+            --jump-accent: #00a0e9;
         }
 
         body {
-            font-family: 'Outfit', sans-serif;
-            background-color: hsl(var(--background));
-            color: #1a1a1a;
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: var(--jump-bg);
+            color: var(--jump-text);
         }
 
-        .vibrant-gradient {
-            background: linear-gradient(135deg, #ff0080 0%, #7928ca 100%);
+        .jump-header {
+            background-color: var(--jump-red);
+            color: white;
         }
 
-        .vibrant-gradient-alt {
-            background: linear-gradient(135deg, #7928ca 0%, #ff0080 100%);
-        }
-
-        .card-shadow {
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-        }
-
-        .active-tab {
-            color: #ff0080;
+        .nav-item {
             position: relative;
+            font-weight: 700;
         }
 
-        .active-tab::after {
+        .nav-item.active::after {
             content: '';
             position: absolute;
-            bottom: -8px;
+            bottom: -5px;
             left: 50%;
             transform: translateX(-50%);
-            width: 20px;
-            height: 3px;
-            background-color: #ff0080;
-            border-radius: 2px;
+            width: 6px;
+            height: 6px;
+            background-color: white;
+            border-radius: 50%;
+        }
+
+        .ranking-badge {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: var(--jump-red);
+            color: white;
+            font-weight: 900;
+            padding: 2px 8px;
+            border-bottom-right-radius: 8px;
+            z-index: 10;
+        }
+
+        .manga-card {
+            background: white;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s;
+        }
+
+        .manga-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .hero-banner {
+            background: url('./assets/hero.png') center/cover no-repeat;
+            position: relative;
+            aspect-ratio: 16/7;
+        }
+
+        .overlay-text {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
         }
     </style>
 </head>
+
 <body class="min-h-screen">
-    <div class="max-w-xl mx-auto px-4 py-6">
-        <!-- Header / Navigation -->
-        <header class="mb-8">
-            <nav class="flex justify-center items-center space-x-10 py-4">
-                <a href="#" class="active-tab font-bold text-lg">Trending</a>
-                <a href="#" class="text-gray-400 font-bold text-lg hover:text-gray-600 transition-colors">New</a>
-                <a href="#" class="text-gray-400 font-bold text-lg hover:text-gray-600 transition-colors">Popular</a>
+    <!-- Main Red Header -->
+    <header class="jump-header pt-4 pb-2 px-4 shadow-md sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto">
+            <div class="flex justify-between items-center mb-4">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl font-black tracking-tighter">マンガハブ＋</span>
+                    <span class="bg-white text-red-600 text-[10px] font-bold px-1 rounded">JS+</span>
+                </div>
+                <div class="flex items-center gap-4 text-xs font-bold">
+                    <a href="#">ログイン・新規登録</a>
+                    <a href="#" class="bg-white text-red-600 px-4 py-1.5 rounded-full">定期購読</a>
+                </div>
+            </div>
+
+            <nav
+                class="flex justify-between items-center text-sm font-bold overflow-x-auto whitespace-nowrap gap-6 pb-1 scrollbar-hide">
+                <a href="#" class="nav-item active">連載一覧</a>
+                <a href="#" class="nav-item">履歴</a>
+                <a href="#" class="nav-item">アプリ</a>
+                <a href="#" class="nav-item">新刊情報</a>
+                <a href="#" class="nav-item">ルーキー！</a>
+                <div class="flex-grow"></div>
+                <button class="p-1">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </button>
             </nav>
-        </header>
+        </div>
+    </header>
 
-        <main>
-            <!-- Weekly Top Section -->
-            <section class="mb-10">
-                <h2 class="text-2xl font-extrabold mb-6">Weekly Top</h2>
-
-                <div class="vibrant-gradient p-6 rounded-[2.5rem] text-white flex gap-6 items-center shadow-xl">
-                    <div class="w-32 h-44 bg-white/20 rounded-2xl flex-shrink-0 overflow-hidden backdrop-blur-sm border border-white/30">
-                        <img src="https://images.unsplash.com/photo-1578632292335-df3abbb0d586?w=400&auto=format&fit=crop&q=60" alt="Manga Cover" class="w-full h-full object-cover">
+    <main class="max-w-4xl mx-auto px-4 py-6">
+        <!-- Hero Section -->
+        <section class="mb-8 relative rounded-xl overflow-hidden shadow-xl border-4 border-black/10">
+            <div class="hero-banner">
+                <div class="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-black/80 to-transparent text-white">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="bg-yellow-400 text-black text-[10px] font-bold px-2 py-0.5 rounded">第2位</span>
+                        <span class="text-sm font-bold opacity-80">次にくるマンガ大賞 2025</span>
                     </div>
-                    <div class="flex flex-col justify-center">
-                        <div class="bg-white/20 self-start px-3 py-1 rounded-full text-xs font-bold mb-3 backdrop-blur-md border border-white/20">
-                            Ranking #1
-                        </div>
-                        <h3 class="text-3xl font-bold mb-2">Shadow of the <br>Eternal Blade</h3>
-                        <p class="text-white/80 text-sm mb-4">Fantasy • Action • Shonen</p>
-                        <div class="flex gap-2">
-                            <span class="bg-white text-pink-600 px-4 py-2 rounded-full text-sm font-bold shadow-md">New Chapter</span>
-                        </div>
-                    </div>
+                    <h2 class="text-3xl font-black italic tracking-wider mb-1">ドラゴンの勇記</h2>
+                    <p class="text-sm font-medium opacity-90">Radiant Blade Chronicles</p>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <!-- Ranking List Section -->
+        <!-- Subscription Banner -->
+        <div class="bg-gray-200 rounded-lg p-3 flex justify-between items-center mb-8 border border-gray-300">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-red-600 rounded flex items-center justify-center text-white font-black text-xs">
+                    J+</div>
+                <p class="text-xs font-bold text-gray-700">週刊少年ジャンプ・本誌の定期購読はこちら！</p>
+            </div>
+            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Left Column: Ranking -->
             <section>
+                <div class="flex items-center justify-between mb-4 border-l-4 border-red-600 pl-3">
+                    <h2 class="text-lg font-black tracking-tight">2月17日のランキング</h2>
+                    <span class="text-xs font-bold text-red-600">もっと見る</span>
+                </div>
+
                 <div class="space-y-4">
+                    <!-- Rank 1 -->
+                    <div class="manga-card flex p-3 gap-4 border border-gray-200 relative">
+                        <div class="ranking-badge bg-red-600">1</div>
+                        <div class="w-24 h-32 bg-gray-100 rounded flex-shrink-0 overflow-hidden">
+                            <img src="./assets/rank1.png" alt="Rank 1" class="w-full h-full object-cover">
+                        </div>
+                        <div class="flex flex-col justify-center gap-1">
+                            <p class="text-[10px] font-bold text-gray-400">三球だけの最強 目指すは甲子園</p>
+                            <h3 class="text-lg font-black leading-tight">轟球魂 -PITCHER'S SPIRIT-</h3>
+                            <p class="text-xs font-medium text-gray-500">住吉九</p>
+                        </div>
+                    </div>
+
                     <!-- Rank 2 -->
-                    <div class="bg-white p-4 rounded-3xl flex items-center gap-4 card-shadow border border-gray-50 group hover:scale-[1.02] transition-transform cursor-pointer">
-                        <div class="w-20 h-28 bg-gray-100 rounded-2xl overflow-hidden flex-shrink-0">
-                            <img src="https://images.unsplash.com/photo-1541562232579-512a21360020?w=200&auto=format&fit=crop&q=60" alt="Manga Cover" class="w-full h-full object-cover">
+                    <div class="manga-card flex p-3 gap-4 border border-gray-200 relative opacity-90">
+                        <div class="ranking-badge bg-gray-600">2</div>
+                        <div class="w-24 h-32 bg-gray-100 rounded flex-shrink-0 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1541562232579-512a21360020?w=400&auto=format&fit=crop&q=60"
+                                alt="Manga" class="w-full h-full object-cover">
                         </div>
-                        <div class="flex-grow">
-                            <div class="text-pink-500 font-bold text-sm mb-1">Ranking #2</div>
-                            <h4 class="text-lg font-bold">Cyberpunk Odyssey</h4>
-                            <p class="text-gray-400 text-xs">Sci-Fi • Thriller • Seinen</p>
-                        </div>
-                        <div class="text-right">
-                            <div class="bg-pink-50 text-pink-500 px-3 py-1 rounded-full text-xs font-bold">Hot</div>
-                        </div>
-                    </div>
-
-                    <!-- Rank 3 -->
-                    <div class="bg-white p-4 rounded-3xl flex items-center gap-4 card-shadow border border-gray-50 group hover:scale-[1.02] transition-transform cursor-pointer">
-                        <div class="w-20 h-28 bg-gray-100 rounded-2xl overflow-hidden flex-shrink-0">
-                            <img src="https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?w=200&auto=format&fit=crop&q=60" alt="Manga Cover" class="w-full h-full object-cover">
-                        </div>
-                        <div class="flex-grow">
-                            <div class="text-pink-500 font-bold text-sm mb-1">Ranking #3</div>
-                            <h4 class="text-lg font-bold">The Alchemist's Path</h4>
-                            <p class="text-gray-400 text-xs">Adventure • Magic • Shonen</p>
-                        </div>
-                        <div class="text-right">
-                            <div class="bg-gray-100 text-gray-500 px-3 py-1 rounded-full text-xs font-bold">New</div>
-                        </div>
-                    </div>
-
-                    <!-- Rank 4 -->
-                    <div class="bg-white p-4 rounded-3xl flex items-center gap-4 card-shadow border border-gray-50 group hover:scale-[1.02] transition-transform cursor-pointer">
-                        <div class="w-20 h-28 bg-gray-100 rounded-2xl overflow-hidden flex-shrink-0">
-                            <img src="https://images.unsplash.com/photo-1542332213-31f87348057f?w=200&auto=format&fit=crop&q=60" alt="Manga Cover" class="w-full h-full object-cover">
-                        </div>
-                        <div class="flex-grow">
-                            <div class="text-pink-500 font-bold text-sm mb-1">Ranking #4</div>
-                            <h4 class="text-lg font-bold">Whispers of the Heart</h4>
-                            <p class="text-gray-400 text-xs">Romance • School • Slice of Life</p>
-                        </div>
-                        <div class="text-right">
-                            <div class="bg-blue-50 text-blue-500 px-3 py-1 rounded-full text-xs font-bold">Updated</div>
-                        </div>
-                    </div>
-
-                    <!-- Rank 5 -->
-                    <div class="bg-white p-4 rounded-3xl flex items-center gap-4 card-shadow border border-gray-50 group hover:scale-[1.02] transition-transform cursor-pointer">
-                        <div class="w-20 h-28 bg-gray-100 rounded-2xl overflow-hidden flex-shrink-0">
-                            <img src="https://images.unsplash.com/photo-1521714161819-15534968fc5f?w=200&auto=format&fit=crop&q=60" alt="Manga Cover" class="w-full h-full object-cover">
-                        </div>
-                        <div class="flex-grow">
-                            <div class="text-pink-500 font-bold text-sm mb-1">Ranking #5</div>
-                            <h4 class="text-lg font-bold">Neon Drifters</h4>
-                            <p class="text-gray-400 text-xs">Mecha • Future • Seinen</p>
-                        </div>
-                        <div class="text-right">
-                            <div class="bg-gray-100 text-gray-400 px-3 py-1 rounded-full text-xs font-bold">9.8</div>
+                        <div class="flex flex-col justify-center gap-1">
+                            <p class="text-[10px] font-bold text-gray-400">今日を生きる為の読むビタミン</p>
+                            <h3 class="text-lg font-black leading-tight">限界OL霧切ギリ子</h3>
+                            <p class="text-xs font-medium text-gray-500">ミートスパ土本</p>
+                            <div class="mt-1">
+                                <span class="bg-red-600 text-white text-[9px] font-bold px-2 py-0.5 rounded">新連載</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
-        </main>
-    </div>
+
+            <!-- Right Column: Featured -->
+            <section>
+                <div class="flex items-center justify-between mb-4 border-l-4 border-blue-600 pl-3">
+                    <h2 class="text-lg font-black tracking-tight">今日のイチオシ</h2>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="manga-card overflow-hidden">
+                        <div class="aspect-video bg-gray-100 relative">
+                            <img src="https://images.unsplash.com/photo-1578632292335-df3abbb0d586?w=800&auto=format&fit=crop&q=60"
+                                alt="Featured" class="w-full h-full object-cover">
+                            <div
+                                class="absolute top-2 left-2 bg-blue-500 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-lg">
+                                連載中</div>
+                        </div>
+                        <div class="p-4 border border-gray-100 border-t-0">
+                            <h3 class="text-xl font-black mb-1">サイバー・オデッセイ</h3>
+                            <p class="text-xs text-gray-500 font-medium italic">未来を切り拓く、孤独な戦士の物語。</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Simple Footer -->
+    <footer class="mt-12 py-8 bg-gray-100 border-t border-gray-200">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <div class="flex justify-center gap-4 text-xs font-bold text-gray-500 mb-4">
+                <a href="#">利用規約</a>
+                <a href="#">プライバシーポリシー</a>
+                <a href="#">ヘルプ</a>
+            </div>
+            <p class="text-[10px] text-gray-400">&copy; 2026 マンガハブ＋ / JS+ Project. All Rights Reserved.</p>
+        </div>
+    </footer>
 </body>
+
 </html>
